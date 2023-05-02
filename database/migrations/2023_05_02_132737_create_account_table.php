@@ -12,13 +12,13 @@
          */
         public function up()
         {
-            Schema::create('account', function (Blueprint $table) {
+            Schema::create('accounts', function (Blueprint $table) {
                 $table->uuid('id')->primary();
                 $table->string('display_name')->nullable();
                 $table->string('email');
                 $table->string('avatar_url')->nullable();
                 $table->string('password');
-                $table->foreignUuid('role_id')->references('id')->on('role');
+                $table->foreignUuid('role_id')->references('id')->on('roles');
                 $table->foreignUuid('information_id')->references('id')->on('information');
                 $table->timestamps();
             });

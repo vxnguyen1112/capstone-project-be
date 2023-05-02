@@ -12,7 +12,7 @@
          */
         public function up()
         {
-            Schema::create('role', function (Blueprint $table) {
+            Schema::create('roles', function (Blueprint $table) {
                 $table->uuid('id')->primary();
                 $table->string('name');
                 $table->timestamps();
