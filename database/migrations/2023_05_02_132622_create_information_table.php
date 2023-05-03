@@ -18,7 +18,7 @@
                 $table->string('last_name');
                 $table->string('gender');
                 $table->string('phone');
-                $table->foreignUuid('address_id')->references('id')->on('address');
+                $table->foreignUuid('address_id')->references('id')->on('addresses');
                 $table->timestamps();
             });
         }
