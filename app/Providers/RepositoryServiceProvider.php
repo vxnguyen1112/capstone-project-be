@@ -28,5 +28,9 @@
                 \App\Repositories\InformationRepository::class,
                 \App\Repositories\Eloquent\InformationRepositoryEloquent::class
             );
+            $this->app->bind(
+                \App\Repositories\DoctorRepository::class,
+                \App\Repositories\Eloquent\DoctorRepositoryEloquent::class
+            );
         }
     }

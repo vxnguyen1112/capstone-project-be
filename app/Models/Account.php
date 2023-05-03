@@ -20,7 +20,8 @@
             'password',
             'avatar_url',
             'role_id',
-            'information_id'
+            'information_id',
+            'is_verified'
         ];
         protected $hidden = [
             'password'
@@ -34,5 +35,10 @@
         public function getJWTCustomClaims()
         {
             return [];
+        }
+
+        public function information()
+        {
+            return $this->belongsTo(Information::class);
         }
     }

@@ -4,6 +4,7 @@
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\api\RoleController;
     use App\Http\Controllers\api\AuthController;
+    use App\Http\Controllers\api\DoctorController;
 
     /*
     |--------------------------------------------------------------------------
@@ -41,3 +42,8 @@
     Route::post('/role', [RoleController::class, 'store']);
     Route::put('/role/{id}/', [RoleController::class, 'update']);
     Route::delete('/role/{id}', [RoleController::class, 'destroy']);
+
+    Route::get('/doctor/{id}', [DoctorController::class, 'getDoctorById']);
+    Route::post('/doctor', [DoctorController::class, 'store']);
+    Route::put('/doctor/{id}/', [DoctorController::class, 'update']);
+    Route::delete('/doctor/{id}', [DoctorController::class, 'destroy']);
