@@ -24,19 +24,19 @@
             $this->accountService = $accountService;
         }
 
-        public function register(Request $request)
+        public function register(StoreRegisterRequest $request)
         {
             $input = $request->all();
             $input['password'] = bcrypt($input['password']);
             $result = $this->accountService->register($input);
-            if ($result === HttpCode::BAD_REQUEST) {
+            if ($result['status'] === HttpCode::BAD_REQUEST) {
                 $message = 'The email has already been taken.';
                 return ResponseHelper::send([], Status::NOT_GOOD, HttpCode::BAD_REQUEST, $message);
             }
-            return ResponseHelper::send($result, statusCode: HttpCode::CREATED);
+            return ResponseHelper::send($result['data'], statusCode: HttpCode::CREATED);
         }
 
-        public function login(Request $request)
+        public function login(LoginRequest $request)
         {
             $result = $this->accountService->login($request->all());
             if ($result['status'] === HttpCode::CREATED) {
@@ -48,17 +48,17 @@
         public function logout()
         {
             $result = $this->accountService->logout();
-            return ResponseHelper::send($result, statusCode: HttpCode::OK);
+            return ResponseHelper::send($result['data']);
         }
 
         public function refresh()
         {
             $result = $this->accountService->refresh();
-            return ResponseHelper::send($result["data"], statusCode: HttpCode::CREATED);
+            return ResponseHelper::send($result["data"]);
         }
 
         public function userProfile()
         {
-            return ResponseHelper::send(auth()->user(), statusCode: HttpCode::CREATED);
+            return ResponseHelper::send(auth()->user());
         }
     }
