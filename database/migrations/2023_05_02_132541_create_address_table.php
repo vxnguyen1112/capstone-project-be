@@ -12,11 +12,12 @@
          */
         public function up()
         {
-            Schema::create('address', function (Blueprint $table) {
+            Schema::create('addresses', function (Blueprint $table) {
                 $table->uuid('id')->primary();
                 $table->string('street');
+                $table->string('ward');
+                $table->string('district');
                 $table->string('city');
-                $table->string('state');
                 $table->timestamps();
             });
         }
