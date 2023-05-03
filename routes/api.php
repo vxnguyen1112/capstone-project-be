@@ -21,6 +21,21 @@
         Route::post('/login', [AuthController::class, 'login']);
         Route::post('/register', [AuthController::class, 'register']);
     });
+    Route::group([
+        'middleware' => 'auth'
+    ], function () {
+        Route::group(
+            [
+                'prefix' => "auth"
+            ],
+            function () {
+                Route::post('/logout', [AuthController::class, 'logout']);
+                Route::post('/refresh', [AuthController::class, 'refresh']);
+                Route::get('/user-profile', [AuthController::class, 'userProfile']);
+                Route::post('/change-pass', [AuthController::class, 'changePassWord']);
+            }
+        );
+    });
     Route::get('/role', [RoleController::class, 'getAllRole']);
     Route::get('/role/{id}', [RoleController::class, 'getRoleById']);
     Route::post('/role', [RoleController::class, 'store']);

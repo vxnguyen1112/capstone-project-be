@@ -37,6 +37,10 @@
 
         public function register($data)
         {
+            $account = $this->accountRepository->findWhere(['email' => $data['email']])->first();
+            if (!is_null($account)) {
+                return DataReturn::Result(status: HttpCode::BAD_REQUEST);
+            }
             try {
                 DB::beginTransaction();
                 $address = $this->addressRepository->create([
@@ -97,7 +101,8 @@
         public function logout()
         {
             auth()->logout();
-            return ['message' => 'User successfully signed out'];
+            $message = 'User successfully signed out';
+            return DataReturn::Result(['message' => $message]);
         }
 
         public function refresh()
