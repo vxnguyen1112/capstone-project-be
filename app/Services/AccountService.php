@@ -4,9 +4,11 @@
 
     use App\Helpers\DataReturn;
     use App\Helpers\HttpCode;
+    use App\Models\Role;
     use App\Repositories\AccountRepository;
     use App\Repositories\AddressRepository;
     use App\Repositories\InformationRepository;
+    use App\Repositories\RoleRepository;
     use Illuminate\Database\Eloquent\ModelNotFoundException;
     use Illuminate\Support\Facades\DB;
     use Illuminate\Support\Facades\Log;
@@ -16,18 +18,18 @@
         protected $accountRepository;
         protected $addressRepository;
         protected $informationRepository;
+        protected $roleRepository;
 
-        /**
-         * @param $accountRepository
-         */
         public function __construct(
             AccountRepository $accountRepository,
             AddressRepository $addressRepository,
-            InformationRepository $informationRepository
+            InformationRepository $informationRepository,
+            RoleRepository $roleRepository
         ) {
             $this->accountRepository = $accountRepository;
             $this->addressRepository = $addressRepository;
             $this->informationRepository = $informationRepository;
+            $this->roleRepository = $roleRepository;
         }
 
         public function checkAccountIsExist($id)
@@ -37,7 +39,12 @@
 
         public function register($data)
         {
+            $data['is_verified'] = true;
             $account = $this->accountRepository->findWhere(['email' => $data['email']])->first();
+            $role = $this->roleRepository->findWhere(['id' => $data['role_id']])->first();
+            if ($role['name'] === \App\Helpers\Role::DOCTOR) {
+                $data['is_verified'] = false;
+            }
             if (!is_null($account)) {
                 return DataReturn::Result(status: HttpCode::BAD_REQUEST);
             }
@@ -61,7 +68,8 @@
                     'email' => $data['email'],
                     'password' => $data['password'],
                     'role_id' => $data['role_id'],
-                    'information_id' => $information['id']
+                    'information_id' => $information['id'],
+                    'is_verified' => $data['is_verified']
                 ]);
                 DB::commit();
                 return DataReturn::Result($result);
