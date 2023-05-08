@@ -23,4 +23,9 @@
         {
             return $this->belongsTo(Account::class)->with('information', 'information.address');
         }
+
+        public function free_times()
+        {
+            return $this->hasMany(Free_time::class)->oldest('startTime');
+        }
     }

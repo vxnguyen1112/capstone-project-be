@@ -32,4 +32,45 @@
                 'account'
             ])->get();
         }
+
+        public function getAllDoctor()
+        {
+            return Doctor::with([
+                'account'
+            ])->get();
+        }
+
+        public function getFreeTimeAllDoctor($param)
+        {
+            if (array_key_exists('date', $param)) {
+                return Doctor::with([
+                        'account',
+                        'free_times' => function ($query) use ($param) {
+                            $query->whereDate('startTime', $param['date']);
+                        }
+                    ]
+                )->get();
+            }
+            return Doctor::with([
+                'account',
+                'free_times'
+            ])->get();
+        }
+
+        public function getFreeTimeByDoctorId($id, $param)
+        {
+            if (array_key_exists('date', $param)) {
+                return Doctor::where(['id' => $id])->with([
+                        'account',
+                        'free_times' => function ($query) use ($param) {
+                            $query->whereDate('startTime', $param['date']);
+                        }
+                    ]
+                )->get();
+            }
+            return Doctor::where(['id' => $id])->with([
+                'account',
+                'free_times'
+            ])->get();
+        }
     }

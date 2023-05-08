@@ -2,7 +2,9 @@
 
 namespace App\Exceptions;
 
+use App\Helpers\CommonResponse;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -36,6 +38,9 @@ class Handler extends ExceptionHandler
     {
         $this->reportable(function (Throwable $e) {
             //
+        });
+        $this->renderable(function (MethodNotAllowedHttpException $e, $request) {
+            return CommonResponse::routeNotFound();
         });
     }
 }
