@@ -34,6 +34,28 @@
             }
             return ResponseHelper::send($result['data']);
         }
+
+        public function getAllDoctor()
+        {
+            $result = $this->doctorService->getAllDoctor();
+            return ResponseHelper::send($result['data']);
+        }
+
+        public function getFreeTimeAllDoctor(Request $request)
+        {
+            $result = $this->doctorService->getFreeTimeAllDoctor($request->all());
+            return ResponseHelper::send($result['data']);
+        }
+
+        public function getFreeTimeByDoctorId(Request $request, $id)
+        {
+            $result = $this->doctorService->getFreeTimeByDoctorId($id, $request->all());
+            if ($result['status'] === HttpCode::NOT_FOUND) {
+                return CommonResponse::notFoundResponse();
+            }
+            return ResponseHelper::send($result['data']);
+        }
+
         public function update(Request $request, $id)
         {
             $result = $this->doctorService->update($request->all(), $id);

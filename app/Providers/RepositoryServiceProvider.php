@@ -32,5 +32,9 @@
                 \App\Repositories\DoctorRepository::class,
                 \App\Repositories\Eloquent\DoctorRepositoryEloquent::class
             );
+            $this->app->bind(
+                \App\Repositories\FreeTimeRepository::class,
+                \App\Repositories\Eloquent\FreeTimeRepositoryEloqent::class
+            );
         }
     }

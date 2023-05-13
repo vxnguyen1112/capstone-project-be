@@ -8,4 +8,11 @@
     interface DoctorRepository extends RepositoryInterface
     {
         public function getDoctorById($id);
+
+        public function getAllDoctor();
+
+        public function getFreeTimeAllDoctor($param);
+
+        public function getFreeTimeByDoctorId($id, $param);
+
     }

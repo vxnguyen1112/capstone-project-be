@@ -18,10 +18,10 @@
          */
 
 
-        public function __construct(DoctorRepository $doctorRepository,AccountRepository $accountRepository)
+        public function __construct(DoctorRepository $doctorRepository, AccountRepository $accountRepository)
         {
             $this->doctorRepository = $doctorRepository;
-            $this->accountRepository=$accountRepository;
+            $this->accountRepository = $accountRepository;
         }
 
         public function store($data)
@@ -36,6 +36,24 @@
                 return DataReturn::Result(status: HttpCode::NOT_FOUND);
             }
             return DataReturn::Result($this->doctorRepository->getDoctorById($id));
+        }
+
+        public function getAllDoctor()
+        {
+            return DataReturn::Result($this->doctorRepository->getAllDoctor());
+        }
+
+        public function getFreeTimeByDoctorId($id, $param)
+        {
+            if (!$this->checkDoctorIsExist($id)) {
+                return DataReturn::Result(status: HttpCode::NOT_FOUND);
+            }
+            return DataReturn::Result($this->doctorRepository->getFreeTimeByDoctorId($id, $param));
+        }
+
+        public function getFreeTimeAllDoctor($param)
+        {
+            return DataReturn::Result($this->doctorRepository->getFreeTimeAllDoctor($param));
         }
 
         public function checkDoctorIsExist($id)
