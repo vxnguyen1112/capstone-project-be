@@ -7,6 +7,7 @@
     use App\Http\Controllers\api\DoctorController;
     use App\Http\Controllers\api\FreeTimeController;
     use App\Http\Controllers\api\AppointmentController;
+    use App\Http\Controllers\api\MedicalRecordController;
 
 
     /*
@@ -49,6 +50,7 @@
     Route::get('/doctor', [DoctorController::class, 'getAllDoctor']);
     Route::get('/doctor/freetime', [DoctorController::class, 'getFreeTimeAllDoctor']);
     Route::get('/doctor/appointment', [AppointmentController::class, 'getAppointmentAllDoctor']);
+    Route::get('/doctor/medicalrecord', [MedicalRecordController::class, 'getMedicalRecordAllDoctor']);
     Route::get('/doctor/{id}', [DoctorController::class, 'getDoctorById']);
     Route::get('/doctor/{id}/freetime', [DoctorController::class, 'getFreeTimeByDoctorId']);
     Route::post('/doctor', [DoctorController::class, 'store']);
@@ -69,3 +71,12 @@
     Route::post('/appointment', [AppointmentController::class, 'store']);
     Route::put('/appointment/{id}/', [AppointmentController::class, 'update']);
     Route::delete('/appointment/{id}', [AppointmentController::class, 'destroy']);
+
+    Route::get('/medicalrecord/{id}', [MedicalRecordController::class, 'getMedicalRecordById']);
+    Route::get('/doctor/{id}/medicalrecord', [MedicalRecordController::class, 'getMedicalRecordByDoctorId']);
+    Route::get('/patient/{id}/medicalrecord', [MedicalRecordController::class, 'getMedicalRecordByPatientId']);
+    Route::get('/patient/medicalrecord', [MedicalRecordController::class, 'getMedicalRecordByPatientId']);
+    Route::get('/medicalrecord/{id}', [MedicalRecordController::class, 'getMedicalRecordById']);
+    Route::post('/medicalrecord', [MedicalRecordController::class, 'store']);
+    Route::put('/medicalrecord/{id}/', [MedicalRecordController::class, 'update']);
+    Route::delete('/medicalrecord/{id}', [MedicalRecordController::class, 'destroy']);

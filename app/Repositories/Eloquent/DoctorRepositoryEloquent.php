@@ -44,6 +44,16 @@
         public function getFreeTimeAllDoctor($param)
         {
             if (array_key_exists('date', $param)) {
+                if ($param['date'] === \date('Y-m-d')) {
+                    return Doctor::with([
+                            'account',
+                            'free_times' => function ($query) use ($param) {
+                                $query->whereDate('startTime', $param['date'])->where('startTime', '>=',
+                                    \date('Y-m-d H:i:s'));
+                            }
+                        ]
+                    )->has('free_times')->get();
+                }
                 return Doctor::with([
                         'account',
                         'free_times' => function ($query) use ($param) {
@@ -55,16 +65,26 @@
             return Doctor::with([
                 'account',
                 'free_times' => function ($query) {
-                    $query->whereDate('startTime', \date('Y-m-d'))->where('startTime', '>=', \date('Y-m-d H:i:s'));
+                    $query->where('startTime', '>=', \date('Y-m-d H:i:s'));
                 }
             ])->whereHas('free_times', function ($query) {
-                $query->whereDate('startTime', \date('Y-m-d'))->where('startTime', '>=', \date('Y-m-d H:i:s'));
+                $query->where('startTime', '>=', \date('Y-m-d H:i:s'));
             })->get();
         }
 
         public function getFreeTimeByDoctorId($id, $param)
         {
             if (array_key_exists('date', $param)) {
+                if ($param['date'] === \date('Y-m-d')) {
+                    return Doctor::where(['id' => $id])->with([
+                            'account',
+                            'free_times' => function ($query) use ($param) {
+                                $query->whereDate('startTime', $param['date'])->where('startTime', '>=',
+                                    \date('Y-m-d H:i:s'));
+                            }
+                        ]
+                    )->get();
+                }
                 return Doctor::where(['id' => $id])->with([
                         'account',
                         'free_times' => function ($query) use ($param) {
@@ -76,7 +96,7 @@
             return Doctor::where(['id' => $id])->with([
                 'account',
                 'free_times' => function ($query) use ($param) {
-                    $query->whereDate('startTime', \date('Y-m-d'))->where('startTime', '>=', \date('Y-m-d H:i:s'));
+                    $query->where('startTime', '>=', \date('Y-m-d H:i:s'));
                 }
             ])->get();
         }
@@ -110,8 +130,8 @@
                 )->get();
             }
             return Doctor::where(['id' => $id])->with([
-                'appointments.time',
-                'appointments.patient'
+                'appointments.patient.information.address',
+                'appointments.time'
             ])->get();
         }
     }
