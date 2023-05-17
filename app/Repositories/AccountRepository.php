@@ -7,4 +7,7 @@
 
     interface AccountRepository extends RepositoryInterface
     {
+        public function getAppointmentAllPatient($param);
+
+        public function getAppointmentByPatientId($id, $param);
     }

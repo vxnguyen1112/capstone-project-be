@@ -9,6 +9,7 @@
     use App\Repositories\AddressRepository;
     use App\Repositories\DoctorRepository;
     use App\Repositories\InformationRepository;
+    use Illuminate\Support\Facades\Date;
     use Prettus\Repository\Criteria\RequestCriteria;
     use Prettus\Repository\Eloquent\BaseRepository;
 
@@ -49,12 +50,16 @@
                             $query->whereDate('startTime', $param['date']);
                         }
                     ]
-                )->get();
+                )->has('free_times')->get();
             }
             return Doctor::with([
                 'account',
-                'free_times'
-            ])->get();
+                'free_times' => function ($query) {
+                    $query->whereDate('startTime', \date('Y-m-d'))->where('startTime', '>=', \date('Y-m-d H:i:s'));
+                }
+            ])->whereHas('free_times', function ($query) {
+                $query->whereDate('startTime', \date('Y-m-d'))->where('startTime', '>=', \date('Y-m-d H:i:s'));
+            })->get();
         }
 
         public function getFreeTimeByDoctorId($id, $param)
@@ -70,7 +75,43 @@
             }
             return Doctor::where(['id' => $id])->with([
                 'account',
-                'free_times'
+                'free_times' => function ($query) use ($param) {
+                    $query->whereDate('startTime', \date('Y-m-d'))->where('startTime', '>=', \date('Y-m-d H:i:s'));
+                }
+            ])->get();
+        }
+
+        public function getAppointmentAllDoctor($param)
+        {
+            if (array_key_exists('date', $param)) {
+                return Doctor::with([
+                        'appointments.patient',
+                        'appointments.time' => function ($query) use ($param) {
+                            $query->whereDate('startTime', $param['date']);
+                        }
+                    ]
+                )->get();
+            }
+            return Doctor::with([
+                'appointments.time',
+                'appointments.patient'
+            ])->get();
+        }
+
+        public function getAppointmentByDoctorId($id, $param)
+        {
+            if (array_key_exists('date', $param)) {
+                return Doctor::where(['id' => $id])->with([
+                        'appointments.patient',
+                        'appointments.time' => function ($query) use ($param) {
+                            $query->whereDate('startTime', $param['date']);
+                        }
+                    ]
+                )->get();
+            }
+            return Doctor::where(['id' => $id])->with([
+                'appointments.time',
+                'appointments.patient'
             ])->get();
         }
     }

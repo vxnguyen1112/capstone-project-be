@@ -28,4 +28,8 @@
         {
             return $this->hasMany(Free_time::class)->oldest('startTime');
         }
+        public function appointments()
+        {
+            return $this->hasMany(Appointment::class)->latest();
+        }
     }

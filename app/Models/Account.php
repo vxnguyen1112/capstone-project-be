@@ -41,4 +41,12 @@
         {
             return $this->belongsTo(Information::class);
         }
+        public function appointments()
+        {
+            return $this->hasMany(Appointment::class,'patient_id');
+        }
+        public function role()
+        {
+            return $this->belongsTo(Role::class);
+        }
     }
