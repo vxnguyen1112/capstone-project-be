@@ -36,5 +36,9 @@
                 \App\Repositories\FreeTimeRepository::class,
                 \App\Repositories\Eloquent\FreeTimeRepositoryEloqent::class
             );
+            $this->app->bind(
+                \App\Repositories\AppointmentRepository::class,
+                \App\Repositories\Eloquent\AppointmentRepositoryEloquent::class
+            );
         }
     }

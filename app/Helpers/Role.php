@@ -7,4 +7,5 @@
         public const ADMIN = 'Admin';
         public const DOCTOR = 'Doctor';
 
+        public const PATIENT = 'Patient';
     }

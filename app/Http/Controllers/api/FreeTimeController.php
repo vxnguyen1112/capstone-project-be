@@ -46,25 +46,10 @@
             }
         }
 
-        public function getAllRole()
-        {
-            $result = $this->freeTimeService->getAllFreeTime();
-            return ResponseHelper::send($result['data']);
-        }
-
-        public function getRoleById($id)
-        {
-            $result = $this->freeTimeService->getRoleById($id);
-            if ($result['status'] === HttpCode::NOT_FOUND) {
-                return CommonResponse::notFoundResponse();
-            }
-            return ResponseHelper::send($result['data']);
-        }
-
         public function update(Request $request, $id)
         {
             $result = $this->freeTimeService->update($request->all(), $id);
-            if ($$result['status'] === HttpCode::NOT_FOUND) {
+            if ($result['status'] === HttpCode::NOT_FOUND) {
                 return CommonResponse::notFoundResponse();
             }
             return ResponseHelper::send($result['data']);

@@ -6,6 +6,7 @@
     use App\Http\Controllers\api\AuthController;
     use App\Http\Controllers\api\DoctorController;
     use App\Http\Controllers\api\FreeTimeController;
+    use App\Http\Controllers\api\AppointmentController;
 
 
     /*
@@ -47,6 +48,7 @@
 
     Route::get('/doctor', [DoctorController::class, 'getAllDoctor']);
     Route::get('/doctor/freetime', [DoctorController::class, 'getFreeTimeAllDoctor']);
+    Route::get('/doctor/appointment', [AppointmentController::class, 'getAppointmentAllDoctor']);
     Route::get('/doctor/{id}', [DoctorController::class, 'getDoctorById']);
     Route::get('/doctor/{id}/freetime', [DoctorController::class, 'getFreeTimeByDoctorId']);
     Route::post('/doctor', [DoctorController::class, 'store']);
@@ -57,3 +59,13 @@
     Route::post('/freetime', [FreeTimeController::class, 'store']);
     Route::put('/freetime/{id}/', [FreeTimeController::class, 'update']);
     Route::delete('/freetime/{id}', [FreeTimeController::class, 'destroy']);
+
+    Route::get('/appointment', [AppointmentController::class, 'getAllAppointment']);
+    Route::get('/appointment/{id}', [AppointmentController::class, 'getAppointmentById']);
+    Route::get('/doctor/{id}/appointment', [AppointmentController::class, 'getAppointmentByDoctorId']);
+    Route::get('/patient/{id}/appointment', [AppointmentController::class, 'getAppointmentByPatientId']);
+    Route::get('/patient/appointment', [AppointmentController::class, 'getAppointmentAllPatient']);
+    Route::get('/appointment/{id}', [AppointmentController::class, 'getAppointmentById']);
+    Route::post('/appointment', [AppointmentController::class, 'store']);
+    Route::put('/appointment/{id}/', [AppointmentController::class, 'update']);
+    Route::delete('/appointment/{id}', [AppointmentController::class, 'destroy']);

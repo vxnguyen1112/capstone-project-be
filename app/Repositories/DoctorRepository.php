@@ -15,4 +15,8 @@
 
         public function getFreeTimeByDoctorId($id, $param);
 
+        public function getAppointmentAllDoctor($param);
+
+        public function getAppointmentByDoctorId($id, $param);
+
     }
