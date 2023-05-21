@@ -10,6 +10,7 @@
     use App\Http\Controllers\api\MedicalRecordController;
     use App\Http\Controllers\api\MedicationController;
     use App\Http\Controllers\api\MessageController;
+    use App\Http\Controllers\api\UploadImageController;
 
 
     /*
@@ -40,6 +41,7 @@
                 Route::post('/refresh', [AuthController::class, 'refresh']);
                 Route::get('/user-profile', [AuthController::class, 'userProfile']);
                 Route::post('/change-pass', [AuthController::class, 'changePassWord']);
+                Route::post('/avatar', [UploadImageController::class, 'uploadToAccountImage']);
             }
         );
 
