@@ -52,6 +52,10 @@
                 \App\Repositories\MessageRepository::class,
                 \App\Repositories\Eloquent\MessageRepositoryEloquent::class
             );
+            $this->app->bind(
+                \App\Repositories\BlogRepository::class,
+                \App\Repositories\Eloquent\BlogRepositoryEloquent::class
+            );
 
         }
     }

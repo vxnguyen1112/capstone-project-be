@@ -11,4 +11,6 @@
 
         public function getAppointmentByPatientId($id, $param);
 
+        public function getAccountByArray($arr);
+
     }

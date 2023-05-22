@@ -15,12 +15,12 @@
         protected $accountRepository;
 
         /**
-         * @param $messageRepository;
-         * @param $accountRepository;
+         * @param $messageRepository ;
+         * @param $accountRepository ;
          */
 
 
-        public function __construct(MessageRepository $messageRepository,AccountRepository $accountRepository)
+        public function __construct(MessageRepository $messageRepository, AccountRepository $accountRepository)
         {
             $this->messageRepository = $messageRepository;
             $this->accountRepository = $accountRepository;
@@ -28,25 +28,32 @@
 
         public function store($data)
         {
-            $data['account_id']=auth()->user()['id'];
+            $data['account_id'] = auth()->user()['id'];
             return DataReturn::Result($this->messageRepository->create($data));
         }
 
         public function getAllConversation($id)
         {
-            $listConversation=$this->messageRepository->getAllConversation($id)->toArray();
-            $account_id = array_map(function($item) {
+            $listConversation = $this->messageRepository->getAllConversation($id)->toArray();
+            $account_id = array_map(function ($item) {
                 return $item['account_id'];
             }, $listConversation);
-            $to_account_id = array_map(function($item) {
+            $account_id = array_values(array_unique($account_id));
+            $to_account_id = array_map(function ($item) {
                 return $item['to_account_id'];
             }, $listConversation);
-           $arr=array_values(array_unique(array_merge($account_id,$to_account_id)));
+            $to_account_id = array_values(array_unique($to_account_id));
+            if ($to_account_id[0] === auth()->user()['id']) {
+                $arr = array_values(array_unique(array_merge($account_id, $to_account_id)));
+            } else {
+                $arr = array_values(array_unique(array_merge($to_account_id, $account_id)));
+            }
             if (($key = array_search($id, $arr)) !== false) {
                 unset($arr[$key]);
             }
-            return DataReturn::Result($this->accountRepository->findWhereIn('id', $arr));
+            return DataReturn::Result($this->accountRepository->getAccountByArray($arr));
         }
+
         public function getMessageByIdAccount($id)
         {
             return DataReturn::Result($this->messageRepository->getMessageByIdAccount($id));

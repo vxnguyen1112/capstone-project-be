@@ -11,6 +11,8 @@
     use App\Http\Controllers\api\MedicationController;
     use App\Http\Controllers\api\MessageController;
     use App\Http\Controllers\api\UploadImageController;
+    use App\Http\Controllers\api\BlogController;
+
 
 
     /*
@@ -40,6 +42,7 @@
                 Route::post('/logout', [AuthController::class, 'logout']);
                 Route::post('/refresh', [AuthController::class, 'refresh']);
                 Route::get('/user-profile', [AuthController::class, 'userProfile']);
+                Route::get('/user', [AuthController::class, 'getUserByQuery']);
                 Route::post('/change-pass', [AuthController::class, 'changePassWord']);
                 Route::post('/avatar', [UploadImageController::class, 'uploadToAccountImage']);
             }
@@ -96,3 +99,9 @@
     Route::post('/medication', [MedicationController::class, 'store']);
     Route::put('/medication/{id}/', [MedicationController::class, 'update']);
     Route::delete('/medication/{id}', [MedicationController::class, 'destroy']);
+
+    Route::get('/blog', [BlogController::class, 'getAllBlog']);
+    Route::get('/blog/{id}', [BlogController::class, 'getBlogById']);
+    Route::post('/blog', [BlogController::class, 'store']);
+    Route::put('/blog/{id}/', [BlogController::class, 'update']);
+    Route::delete('/blog/{id}', [BlogController::class, 'destroy']);

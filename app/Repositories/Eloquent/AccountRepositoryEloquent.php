@@ -63,4 +63,10 @@
             ])->get();
         }
 
+        public function getAccountByArray($arr)
+        {
+            $placeholders = implode(',', array_fill(0, count($arr), '?'));
+            $result = Account::whereIn('id', $arr)->orderByRaw("field(id,{$placeholders})", $arr)->get();
+            return $result;
+        }
     }
