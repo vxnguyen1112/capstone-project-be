@@ -34,6 +34,14 @@
             }
             return ResponseHelper::send($result['data']);
         }
+        public function getPatientOfDoctor($id)
+        {
+            $result = $this->doctorService->getPatientOfDoctor($id);
+            if ($result['status'] === HttpCode::NOT_FOUND) {
+                return CommonResponse::notFoundResponse();
+            }
+            return ResponseHelper::send($result['data']);
+        }
 
         public function getAllDoctor()
         {

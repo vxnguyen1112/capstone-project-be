@@ -46,4 +46,9 @@
                 );
             })->get();
         }
+
+        public function getIdPatientOfDoctor($id)
+        {
+           return Appointment::where(['doctor_id'=>$id,'status'=>AppointmentStatus::ACCEPT])->select('patient_id')->latest('updated_at')->get();
+        }
     }

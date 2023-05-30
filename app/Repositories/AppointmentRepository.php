@@ -8,5 +8,6 @@
     interface AppointmentRepository extends RepositoryInterface
     {
         public function checkAppointment($data,$freeTime);
+        public function getIdPatientOfDoctor($id);
 
     }

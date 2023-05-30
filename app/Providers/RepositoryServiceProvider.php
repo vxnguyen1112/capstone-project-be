@@ -56,6 +56,10 @@
                 \App\Repositories\BlogRepository::class,
                 \App\Repositories\Eloquent\BlogRepositoryEloquent::class
             );
+            $this->app->bind(
+                \App\Repositories\CommentRepository::class,
+                \App\Repositories\Eloquent\CommentRepositoryEloquent::class
+            );
 
         }
     }

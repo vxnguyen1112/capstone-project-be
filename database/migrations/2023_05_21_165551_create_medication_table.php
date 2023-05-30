@@ -19,7 +19,7 @@
                 $table->string('frequency');
                 $table->string('reason')->nullable();
                 $table->string('route');
-                $table->foreignUuid('medical_record_id')->references('id')->on('medical_records');
+                $table->foreignUuid('medical_record_id')->references('id')->on('medical_records')->onUpdate('cascade')->onDelete('cascade');
                 $table->timestamps();
             });
         }
