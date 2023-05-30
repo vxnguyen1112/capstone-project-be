@@ -62,4 +62,5 @@
                 'appointments.doctor.account'
             ])->get();
         }
+
     }

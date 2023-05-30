@@ -9,6 +9,7 @@
     use App\Http\Controllers\api\AppointmentController;
     use App\Http\Controllers\api\MedicalRecordController;
     use App\Http\Controllers\api\MedicationController;
+    use App\Http\Controllers\api\MessageController;
 
 
     /*
@@ -41,6 +42,12 @@
                 Route::post('/change-pass', [AuthController::class, 'changePassWord']);
             }
         );
+
+        Route::get('/message/{id}', [MessageController::class, 'getMessageByIdAccount']);
+        Route::get('/account/{id}/message', [MessageController::class, 'getAllConversation']);
+        Route::post('/message', [MessageController::class, 'store']);
+        Route::put('/message/{id}/', [MessageController::class, 'update']);
+        Route::delete('/message/{id}', [MessageController::class, 'destroy']);
     });
     Route::get('/role', [RoleController::class, 'getAllRole']);
     Route::get('/role/{id}', [RoleController::class, 'getRoleById']);
