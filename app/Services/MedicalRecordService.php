@@ -6,26 +6,43 @@
     use App\Helpers\HttpCode;
     use App\Models\Medical_record;
     use App\Repositories\MedicalRecordRepository;
+    use App\Repositories\MedicationRepository;
     use App\Repositories\RoleRepository;
+    use Illuminate\Support\Facades\Log;
 
     class MedicalRecordService
     {
         protected $medicalRecordRepository;
-
+        protected $medicationRepository;
 
         /**
          * @param $medicalRecordRepository
+         * @param $medicationRepository
          */
 
 
-        public function __construct(MedicalRecordRepository $medicalRecordRepository)
-        {
+        public function __construct(
+            MedicalRecordRepository $medicalRecordRepository,
+            MedicationRepository $medicationRepository
+        ) {
             $this->medicalRecordRepository = $medicalRecordRepository;
+            $this->medicationRepository = $medicationRepository;
         }
 
         public function store($data)
         {
-            return DataReturn::Result($this->medicalRecordRepository->create($data));
+            $medicalRecord = $this->medicalRecordRepository->create($data);
+            $medicalRecord['medications'] = [];
+            if (!array_key_exists('medications', $data)) {
+                return DataReturn::Result($medicalRecord);
+            }
+            foreach ($data['medications'] as $item) {
+                $item['medical_record_id'] = $medicalRecord['id'];
+                $temp = $medicalRecord['medications'];
+                array_push($temp, $this->medicationRepository->create($item));
+                $medicalRecord['medications'] = $temp;
+            }
+            return DataReturn::Result($medicalRecord);
         }
 
         public function getMedicalRecordById($id)

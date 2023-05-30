@@ -27,7 +27,7 @@
             return Message::where(['account_id' => $id])->orWhere(['to_account_id' => $id])->select([
                 'account_id',
                 'to_account_id'
-            ])->distinct()->get();
+            ])->latest()->get();
         }
 
         public function getMessageByIdAccount($id)

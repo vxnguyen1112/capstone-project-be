@@ -120,5 +120,13 @@
         {
             return $this->createNewToken(auth()->refresh());
         }
+        public function getUserByQuery($query)
+        {
+            if (array_key_exists('display_name', $query)) {
+                array_push($query, ['display_name', 'like', '%' . addslashes($query['display_name']) . '%']);
+                unset($query['display_name']);
+            }
+            return $this->accountRepository->findWhere($query);
+        }
 
     }

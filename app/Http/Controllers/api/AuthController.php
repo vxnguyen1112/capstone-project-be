@@ -61,4 +61,9 @@
         {
             return ResponseHelper::send(auth()->user());
         }
+        public function getUserByQuery(Request $request)
+        {
+            $query = $request->only(['display_name', 'id']);
+            return ResponseHelper::send($this->accountService->getUserByQuery($query));
+        }
     }
