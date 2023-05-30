@@ -48,6 +48,10 @@
                 \App\Repositories\MedicationRepository::class,
                 \App\Repositories\Eloquent\MedicationRepositoryEloquent::class
             );
+            $this->app->bind(
+                \App\Repositories\MessageRepository::class,
+                \App\Repositories\Eloquent\MessageRepositoryEloquent::class
+            );
 
         }
     }
