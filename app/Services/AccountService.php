@@ -105,7 +105,10 @@
             $results["status"] = HttpCode::CREATED;
             return $results;
         }
-
+        public function update($data, $id)
+        {
+            return DataReturn::Result($this->accountRepository->update($data, $id));
+        }
         public function logout()
         {
             auth()->logout();
