@@ -75,7 +75,7 @@
         public function update(Request $request, $id)
         {
             $result = $this->medicalRecordService->update($request->all(), $id);
-            if ($$result['status'] === HttpCode::NOT_FOUND) {
+            if ($result['status'] === HttpCode::NOT_FOUND) {
                 return CommonResponse::notFoundResponse();
             }
             return ResponseHelper::send($result['data']);

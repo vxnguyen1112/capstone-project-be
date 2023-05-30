@@ -2,10 +2,14 @@
 
     namespace App\Services;
 
+    use App\Exceptions\FreetimeException;
     use App\Helpers\DataReturn;
+    use App\Helpers\FreeTimeMessage;
     use App\Helpers\HttpCode;
+    use App\Helpers\Validate;
     use App\Repositories\MedicalRecordRepository;
     use App\Repositories\MedicationRepository;
+    use Carbon\Carbon;
 
     class MedicationService
     {
@@ -29,7 +33,12 @@
 
         public function store($data)
         {
-            return DataReturn::Result($this->medicationRepository->create($data));
+            $result = [];
+            foreach ($data['medications'] as $item) {
+                $item['medical_record_id'] = $data['medical_record_id'];
+                array_push($result, $this->medicationRepository->create($item));
+            }
+            return DataReturn::Result($result);
         }
 
         public function getMedicationById($id)

@@ -5,6 +5,7 @@
     use App\Helpers\DataReturn;
     use App\Helpers\HttpCode;
     use App\Repositories\AccountRepository;
+    use App\Repositories\AppointmentRepository;
     use App\Repositories\DoctorRepository;
     use Illuminate\Support\Facades\Log;
 
@@ -12,16 +13,21 @@
     {
         protected $doctorRepository;
         protected $accountRepository;
+        protected $appointmentRepository;
 
         /**
          * @param $doctorRepository
+         * @param $accountRepository
+         * @param $appointmentRepository
+
          */
 
 
-        public function __construct(DoctorRepository $doctorRepository, AccountRepository $accountRepository)
+        public function __construct(DoctorRepository $doctorRepository, AccountRepository $accountRepository,AppointmentRepository $appointmentRepository)
         {
             $this->doctorRepository = $doctorRepository;
             $this->accountRepository = $accountRepository;
+            $this->appointmentRepository = $appointmentRepository;
         }
 
         public function store($data)
@@ -49,6 +55,19 @@
                 return DataReturn::Result(status: HttpCode::NOT_FOUND);
             }
             return DataReturn::Result($this->doctorRepository->getFreeTimeByDoctorId($id, $param));
+        }
+        public function getPatientOfDoctor($id)
+        {
+            if (!$this->checkDoctorIsExist($id)) {
+                return DataReturn::Result(status: HttpCode::NOT_FOUND);
+            }
+            $listPatient=$this->appointmentRepository->getIdPatientOfDoctor($id)->toArray();
+
+            $listPatient = array_map(function ($item) {
+                return $item['patient_id'];
+            }, $listPatient);
+            return DataReturn::Result($this->accountRepository->getAccountByArray(array_values(array_unique($listPatient))));
+
         }
 
         public function getFreeTimeAllDoctor($param)

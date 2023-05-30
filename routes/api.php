@@ -12,6 +12,7 @@
     use App\Http\Controllers\api\MessageController;
     use App\Http\Controllers\api\UploadImageController;
     use App\Http\Controllers\api\BlogController;
+    use App\Http\Controllers\api\CommentController;
 
 
 
@@ -66,6 +67,7 @@
     Route::get('/doctor/medicalrecord', [MedicalRecordController::class, 'getMedicalRecordAllDoctor']);
     Route::get('/doctor/{id}', [DoctorController::class, 'getDoctorById']);
     Route::get('/doctor/{id}/freetime', [DoctorController::class, 'getFreeTimeByDoctorId']);
+    Route::get('/doctor/{id}/patient', [DoctorController::class, 'getPatientOfDoctor']);
     Route::post('/doctor', [DoctorController::class, 'store']);
     Route::put('/doctor/{id}/', [DoctorController::class, 'update']);
     Route::delete('/doctor/{id}', [DoctorController::class, 'destroy']);
@@ -102,6 +104,12 @@
 
     Route::get('/blog', [BlogController::class, 'getAllBlog']);
     Route::get('/blog/{id}', [BlogController::class, 'getBlogById']);
+    Route::get('/blog/{id}/comment', [CommentController::class, 'getCommentByBlog']);
     Route::post('/blog', [BlogController::class, 'store']);
     Route::put('/blog/{id}/', [BlogController::class, 'update']);
     Route::delete('/blog/{id}', [BlogController::class, 'destroy']);
+
+    Route::get('/comment/{id}', [CommentController::class, 'getCommentById']);
+    Route::post('/comment', [CommentController::class, 'store']);
+    Route::put('/comment/{id}/', [CommentController::class, 'update']);
+    Route::delete('/comment/{id}', [CommentController::class, 'destroy']);

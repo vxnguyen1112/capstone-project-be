@@ -10,7 +10,7 @@
     use Illuminate\Http\Exceptions\HttpResponseException;
     use Illuminate\Validation\ValidationException;
 
-    class StoreMedicationRequest extends FormRequest
+    class StoreCommentRequest extends FormRequest
     {
         /**
          * Determine if the user is authorized to make this request.
@@ -25,13 +25,17 @@
         public function rules()
         {
             return [
-                'medical_record_id' => 'required|string|exists:medical_records,id'
+                'content' => 'required|string',
+                'account_id' => 'required|string|exists:accounts,id',
+                'blog_id' => 'required|string|exists:blogs,id',
+                'parent_id' => 'string|exists:comments,id',
             ];
         }
 
         protected function failedValidation(Validator $validator)
         {
             $validator_errors = (new ValidationException($validator))->errors();
-            throw new HttpResponseException(ResponseHelper::send([],Status::NOT_GOOD, HttpCode::BAD_REQUEST, reset($validator_errors)[0]));
+            throw new HttpResponseException(ResponseHelper::send([], Status::NOT_GOOD, HttpCode::BAD_REQUEST,
+                reset($validator_errors)[0]));
         }
     }

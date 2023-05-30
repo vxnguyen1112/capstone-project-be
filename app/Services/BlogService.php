@@ -38,7 +38,7 @@
             if (!$this->checkBlogIsExist($id)) {
                 return DataReturn::Result(status: HttpCode::NOT_FOUND);
             }
-            return DataReturn::Result($this->blogRepository->with('account')->findWhere(['id' => $id]));
+            return DataReturn::Result($this->blogRepository->with(['account', 'comments'])->findWhere(['id' => $id]));
         }
 
         public function checkBlogIsExist($id)
