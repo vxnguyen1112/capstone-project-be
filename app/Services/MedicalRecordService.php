@@ -35,7 +35,8 @@
             }
             return DataReturn::Result($this->medicalRecordRepository->with([
                 'patient',
-                'doctor'
+                'doctor',
+                'medications'
             ])->findWhere(['id' => $id]));
         }
 

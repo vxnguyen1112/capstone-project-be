@@ -33,4 +33,8 @@
         {
             return $this->belongsTo(Doctor::class)->with('account');
         }
+        public function medications()
+        {
+            return $this->hasMany(Medication::class)->oldest();
+        }
     }

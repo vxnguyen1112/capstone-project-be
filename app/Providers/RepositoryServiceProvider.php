@@ -44,6 +44,10 @@
                 \App\Repositories\MedicalRecordRepository::class,
                 \App\Repositories\Eloquent\MedicalRecordRepositoryEloquent::class
             );
+            $this->app->bind(
+                \App\Repositories\MedicationRepository::class,
+                \App\Repositories\Eloquent\MedicationRepositoryEloquent::class
+            );
 
         }
     }

@@ -8,6 +8,7 @@
     use App\Http\Controllers\api\FreeTimeController;
     use App\Http\Controllers\api\AppointmentController;
     use App\Http\Controllers\api\MedicalRecordController;
+    use App\Http\Controllers\api\MedicationController;
 
 
     /*
@@ -80,3 +81,9 @@
     Route::post('/medicalrecord', [MedicalRecordController::class, 'store']);
     Route::put('/medicalrecord/{id}/', [MedicalRecordController::class, 'update']);
     Route::delete('/medicalrecord/{id}', [MedicalRecordController::class, 'destroy']);
+
+    Route::get('/medication/{id}', [MedicationController::class, 'getMedicationById']);
+    Route::get('/medicalrecord/{id}/medication', [MedicationController::class, 'getMedicationByMedicalRecordId']);
+    Route::post('/medication', [MedicationController::class, 'store']);
+    Route::put('/medication/{id}/', [MedicationController::class, 'update']);
+    Route::delete('/medication/{id}', [MedicationController::class, 'destroy']);
