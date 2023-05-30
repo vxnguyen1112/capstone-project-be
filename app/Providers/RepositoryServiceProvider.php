@@ -40,5 +40,10 @@
                 \App\Repositories\AppointmentRepository::class,
                 \App\Repositories\Eloquent\AppointmentRepositoryEloquent::class
             );
+            $this->app->bind(
+                \App\Repositories\MedicalRecordRepository::class,
+                \App\Repositories\Eloquent\MedicalRecordRepositoryEloquent::class
+            );
+
         }
     }
