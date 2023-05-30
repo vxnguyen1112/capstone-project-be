@@ -6,33 +6,37 @@
     use App\Helpers\HttpCode;
     use App\Helpers\ResponseHelper;
     use App\Http\Controllers\Controller;
+    use App\Http\Requests\StoreMedicationRequest;
     use App\Http\Requests\StoreRoleRequest;
-    use App\Services\RoleService;
+    use App\Services\MedicationService;
     use Illuminate\Http\Request;
 
-    class RoleController extends Controller
+    class MedicationController extends Controller
     {
-        protected $roleService;
+        protected $medicationService;
 
-        public function __construct(RoleService $roleService)
+        public function __construct(MedicationService $medicationService)
         {
-            $this->roleService = $roleService;
+            $this->medicationService = $medicationService;
         }
 
-        public function store(StoreRoleRequest $request)
+        public function store(StoreMedicationRequest $request)
         {
-            $result = $this->roleService->store($request->all());
+            $result = $this->medicationService->store($request->all());
             return ResponseHelper::send($result['data'], statusCode: HttpCode::CREATED);
         }
 
-        public function getAllRole()
+        public function getMedicationById($id)
         {
-            $result = $this->roleService->getAllRole();
-            return ResponseHelper::send($result['data'], statusCode: HttpCode::CREATED);
+            $result = $this->medicationService->getMedicationById($id);
+            if ($result['status'] === HttpCode::NOT_FOUND) {
+                return CommonResponse::notFoundResponse();
+            }
+            return ResponseHelper::send($result['data']);
         }
-        public function getRoleById($id)
+        public function getMedicationByMedicalRecordId($id)
         {
-            $result = $this->roleService->getRoleById($id);
+            $result = $this->medicationService->getMedicationByMedicalRecordId($id);
             if ($result['status'] === HttpCode::NOT_FOUND) {
                 return CommonResponse::notFoundResponse();
             }
@@ -40,7 +44,7 @@
         }
         public function update(Request $request, $id)
         {
-            $result = $this->roleService->update($request->all(), $id);
+            $result = $this->medicationService->update($request->all(), $id);
             if ($result['status'] === HttpCode::NOT_FOUND) {
                 return CommonResponse::notFoundResponse();
             }
@@ -49,7 +53,7 @@
 
         public function destroy($id)
         {
-            $result = $this->roleService->delete($id);
+            $result = $this->medicationService->delete($id);
             if ($result['status'] === HttpCode::NOT_FOUND) {
                 return CommonResponse::notFoundResponse();
             }
