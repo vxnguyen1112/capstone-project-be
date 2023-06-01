@@ -105,7 +105,7 @@
     Route::get('/blog', [BlogController::class, 'getAllBlog']);
     Route::get('/blog/{id}', [BlogController::class, 'getBlogById']);
     Route::get('/blog/{id}/comment', [CommentController::class, 'getCommentByBlog']);
-    Route::post('/blog', [BlogController::class, 'store']);
+    Route::post('/blog', [UploadImageController::class, 'uploadToBlog']);
     Route::put('/blog/{id}/', [BlogController::class, 'update']);
     Route::delete('/blog/{id}', [BlogController::class, 'destroy']);
 

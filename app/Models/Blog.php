@@ -15,6 +15,7 @@
             'title',
             'body',
             'account_id',
+            'image'
         ];
 
         public function account()

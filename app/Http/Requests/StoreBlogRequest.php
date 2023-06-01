@@ -28,6 +28,7 @@
                 'title' => 'required|string',
                 'body' => 'required|string',
                 'account_id' => 'required|string|exists:accounts,id',
+                'image' => 'mimes:jpeg,bmp,jpg,png|between:1, 6000',
             ];
         }
 
