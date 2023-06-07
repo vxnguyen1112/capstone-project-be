@@ -21,4 +21,8 @@
             $this->pushCriteria(app(RequestCriteria::class));
         }
 
+        public function getAllBlog()
+        {
+            return Blog::withCount('comment')->with('account')->latest()->get();
+        }
     }

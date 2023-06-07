@@ -32,4 +32,8 @@
         {
             return $this->hasMany(Appointment::class)->latest();
         }
+        public function feedback()
+        {
+            return $this->hasMany(Feedback::class)->oldest();
+        }
     }

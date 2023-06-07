@@ -19,12 +19,14 @@
          * @param $doctorRepository
          * @param $accountRepository
          * @param $appointmentRepository
-
          */
 
 
-        public function __construct(DoctorRepository $doctorRepository, AccountRepository $accountRepository,AppointmentRepository $appointmentRepository)
-        {
+        public function __construct(
+            DoctorRepository $doctorRepository,
+            AccountRepository $accountRepository,
+            AppointmentRepository $appointmentRepository
+        ) {
             $this->doctorRepository = $doctorRepository;
             $this->accountRepository = $accountRepository;
             $this->appointmentRepository = $appointmentRepository;
@@ -44,9 +46,13 @@
             return DataReturn::Result($this->doctorRepository->getDoctorById($id));
         }
 
-        public function getAllDoctor()
+        public function getAllDoctor($query)
         {
-            return DataReturn::Result($this->doctorRepository->getAllDoctor());
+            if (!key_exists('name', $query)) {
+                return DataReturn::Result($this->doctorRepository->getAllDoctor());
+            }
+            $query = addslashes($query['name']);
+            return DataReturn::Result($this->doctorRepository->getAllDoctor($query));
         }
 
         public function getFreeTimeByDoctorId($id, $param)
@@ -56,17 +62,25 @@
             }
             return DataReturn::Result($this->doctorRepository->getFreeTimeByDoctorId($id, $param));
         }
-        public function getPatientOfDoctor($id)
+
+        public function getPatientOfDoctor($id, $query)
         {
             if (!$this->checkDoctorIsExist($id)) {
                 return DataReturn::Result(status: HttpCode::NOT_FOUND);
             }
-            $listPatient=$this->appointmentRepository->getIdPatientOfDoctor($id)->toArray();
-
+            $listPatient = $this->appointmentRepository->getIdPatientOfDoctor($id)->toArray();
+            if (!count($listPatient)) {
+                return DataReturn::Result([]);
+            }
             $listPatient = array_map(function ($item) {
                 return $item['patient_id'];
             }, $listPatient);
-            return DataReturn::Result($this->accountRepository->getAccountByArray(array_values(array_unique($listPatient))));
+            if (!key_exists('name', $query)) {
+                return DataReturn::Result($this->accountRepository->getAccountByArray(array_values(array_unique($listPatient))));
+            }
+            $query = addslashes($query['name']);
+            return DataReturn::Result($this->accountRepository->getAccountByArray(array_values(array_unique($listPatient)),
+                $query));
 
         }
 

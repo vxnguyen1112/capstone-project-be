@@ -13,11 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('blogs', function (Blueprint $table) {
+        Schema::create('feedback', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('title');
-            $table->text('body');
+            $table->string('content');
+            $table->bigInteger('star');
             $table->foreignUuid('account_id')->references('id')->on('accounts');
+            $table->foreignUuid('doctor_id')->references('id')->on('doctors');
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('blogs');
+        Schema::dropIfExists('feedback');
     }
 };

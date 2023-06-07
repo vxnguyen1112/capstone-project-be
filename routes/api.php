@@ -13,6 +13,7 @@
     use App\Http\Controllers\api\UploadImageController;
     use App\Http\Controllers\api\BlogController;
     use App\Http\Controllers\api\CommentController;
+    use App\Http\Controllers\api\FeedbackController;
 
 
 
@@ -44,6 +45,7 @@
                 Route::post('/refresh', [AuthController::class, 'refresh']);
                 Route::get('/user-profile', [AuthController::class, 'userProfile']);
                 Route::get('/user', [AuthController::class, 'getUserByQuery']);
+                Route::put('/user', [AuthController::class, 'update']);
                 Route::post('/change-pass', [AuthController::class, 'changePassWord']);
                 Route::post('/avatar', [UploadImageController::class, 'uploadToAccountImage']);
             }
@@ -68,6 +70,7 @@
     Route::get('/doctor/{id}', [DoctorController::class, 'getDoctorById']);
     Route::get('/doctor/{id}/freetime', [DoctorController::class, 'getFreeTimeByDoctorId']);
     Route::get('/doctor/{id}/patient', [DoctorController::class, 'getPatientOfDoctor']);
+    Route::get('/doctor/{id}/feedback', [FeedbackController::class, 'getFeedbackByDoctor']);
     Route::post('/doctor', [DoctorController::class, 'store']);
     Route::put('/doctor/{id}/', [DoctorController::class, 'update']);
     Route::delete('/doctor/{id}', [DoctorController::class, 'destroy']);
@@ -113,3 +116,8 @@
     Route::post('/comment', [CommentController::class, 'store']);
     Route::put('/comment/{id}/', [CommentController::class, 'update']);
     Route::delete('/comment/{id}', [CommentController::class, 'destroy']);
+
+    Route::get('/feedback/{id}', [FeedbackController::class, 'getFeedbackById']);
+    Route::post('/feedback', [FeedbackController::class, 'store']);
+    Route::put('/feedback/{id}/', [FeedbackController::class, 'update']);
+    Route::delete('/feedback/{id}', [FeedbackController::class, 'destroy']);
