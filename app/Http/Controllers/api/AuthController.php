@@ -61,9 +61,21 @@
         {
             return ResponseHelper::send(auth()->user());
         }
+
         public function getUserByQuery(Request $request)
         {
             $query = $request->only(['display_name', 'id']);
             return ResponseHelper::send($this->accountService->getUserByQuery($query));
+        }
+
+        public function update(Request $request)
+        {
+            $data = $request->all();
+            if (key_exists('password', $data)) {
+                $data['password'] = bcrypt($data['password']);
+            }
+            $id = auth()->user()['id'];
+            $result = $this->accountService->update($data, $id);
+            return ResponseHelper::send($result['data']);
         }
     }

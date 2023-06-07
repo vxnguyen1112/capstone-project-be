@@ -34,18 +34,18 @@
             }
             return ResponseHelper::send($result['data']);
         }
-        public function getPatientOfDoctor($id)
+        public function getPatientOfDoctor(Request $request)
         {
-            $result = $this->doctorService->getPatientOfDoctor($id);
+            $result = $this->doctorService->getPatientOfDoctor($request['id'],$request->all());
             if ($result['status'] === HttpCode::NOT_FOUND) {
                 return CommonResponse::notFoundResponse();
             }
             return ResponseHelper::send($result['data']);
         }
 
-        public function getAllDoctor()
+        public function getAllDoctor(Request $request)
         {
-            $result = $this->doctorService->getAllDoctor();
+            $result = $this->doctorService->getAllDoctor($request->all());
             return ResponseHelper::send($result['data']);
         }
 

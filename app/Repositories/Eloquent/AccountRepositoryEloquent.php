@@ -63,10 +63,12 @@
             ])->get();
         }
 
-        public function getAccountByArray($arr)
+        public function getAccountByArray($arr, $query = "")
         {
             $placeholders = implode(',', array_fill(0, count($arr), '?'));
-            $result = Account::whereIn('id', $arr)->orderByRaw("field(id,{$placeholders})", $arr)->get();
+            $result = Account::where('display_name', 'LIKE', "%{$query}%")->whereIn('id',
+                $arr)->orderByRaw("field(id,{$placeholders})", $arr)->get();
             return $result;
         }
+
     }

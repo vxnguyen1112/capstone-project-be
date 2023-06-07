@@ -60,6 +60,10 @@
                 \App\Repositories\CommentRepository::class,
                 \App\Repositories\Eloquent\CommentRepositoryEloquent::class
             );
+            $this->app->bind(
+                \App\Repositories\FeedbackRepository::class,
+                \App\Repositories\Eloquent\FeedbackRepositoryEloquent::class
+            );
 
         }
     }

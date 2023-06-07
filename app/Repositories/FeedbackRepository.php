@@ -4,7 +4,7 @@
 
     use Prettus\Repository\Contracts\RepositoryInterface;
 
-    interface BlogRepository extends RepositoryInterface
+    interface FeedbackRepository extends RepositoryInterface
     {
-        public function getAllBlog();
+        public function getFeedbackByDoctor($id);
     }

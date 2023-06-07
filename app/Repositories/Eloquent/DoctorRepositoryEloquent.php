@@ -10,6 +10,7 @@
     use App\Repositories\DoctorRepository;
     use App\Repositories\InformationRepository;
     use Illuminate\Support\Facades\Date;
+    use Illuminate\Support\Facades\Log;
     use Prettus\Repository\Criteria\RequestCriteria;
     use Prettus\Repository\Eloquent\BaseRepository;
 
@@ -29,16 +30,23 @@
 
         public function getDoctorById($id)
         {
-            return Doctor::where(['id' => $id])->with([
-                'account'
+            return Doctor::where(['id' => $id])->withAvg('feedback', 'star')->with([
+                'account',
+                'feedback'
             ])->get();
         }
 
-        public function getAllDoctor()
+        public function getAllDoctor($name = '')
         {
-            return Doctor::with([
-                'account'
-            ])->get();
+            return Doctor::withAvg('feedback', 'star')->with([
+                'account' => function ($query) use ($name) {
+                    $query->where('display_name', 'LIKE', "%{$name}%");
+                }
+            ])->whereHas(
+                'account', function ($query) use ($name) {
+                $query->where('display_name', 'LIKE', "%{$name}%");
+            }
+            )->get();
         }
 
         public function getFreeTimeAllDoctor($param)

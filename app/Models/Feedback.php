@@ -6,30 +6,21 @@
     use Illuminate\Database\Eloquent\Factories\HasFactory;
     use Illuminate\Database\Eloquent\Model;
 
-    class Blog extends Model
+    class Feedback extends Model
     {
         use HasFactory;
         use UUID;
 
         protected $fillable = [
-            'title',
-            'body',
+            'content',
+            'star',
             'account_id',
-            'image'
+            'doctor_id',
         ];
 
         public function account()
         {
             return $this->belongsTo(Account::class);
-        }
-
-        public function comments()
-        {
-            return $this->hasMany(Comment::class)->whereNull('parent_id')->oldest();
-        }
-        public function comment()
-        {
-            return $this->hasMany(Comment::class);
         }
 
     }

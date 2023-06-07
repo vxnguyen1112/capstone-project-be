@@ -48,8 +48,9 @@
         public function uploadToBlog(StoreBlogRequest $request)
         {
             $data = $request->all();
-            $image = $request->file('image');
-            $data['image'] = $this->upload($image)['url'];
+            Log::error($data);
+//            $image = $request->file('image');
+//            $data['image'] = $this->upload($image)['url'];
             $result = $this->blogService->store($data);
             return ResponseHelper::send($result);
         }

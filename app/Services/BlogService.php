@@ -30,7 +30,7 @@
 
         public function getAllBlog()
         {
-            return DataReturn::Result($this->blogRepository->with('account')->all());
+            return DataReturn::Result($this->blogRepository->getAllBlog());
         }
 
         public function getBlogById($id)
