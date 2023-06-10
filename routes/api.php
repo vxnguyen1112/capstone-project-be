@@ -14,6 +14,7 @@
     use App\Http\Controllers\api\BlogController;
     use App\Http\Controllers\api\CommentController;
     use App\Http\Controllers\api\FeedbackController;
+    use App\Http\Controllers\api\NotificationController;
 
 
 
@@ -56,6 +57,9 @@
         Route::post('/message', [MessageController::class, 'store']);
         Route::put('/message/{id}/', [MessageController::class, 'update']);
         Route::delete('/message/{id}', [MessageController::class, 'destroy']);
+
+        Route::get('/notification', [NotificationController::class, 'getNotification']);
+        Route::get('/notification/check', [NotificationController::class, 'checkNotification']);
     });
     Route::get('/role', [RoleController::class, 'getAllRole']);
     Route::get('/role/{id}', [RoleController::class, 'getRoleById']);
