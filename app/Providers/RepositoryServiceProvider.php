@@ -64,6 +64,9 @@
                 \App\Repositories\FeedbackRepository::class,
                 \App\Repositories\Eloquent\FeedbackRepositoryEloquent::class
             );
-
+            $this->app->bind(
+                \App\Repositories\NotificationRepository::class,
+                \App\Repositories\Eloquent\NotificationRepositoryEloquent::class
+            );
         }
     }

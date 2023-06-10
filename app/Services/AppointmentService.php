@@ -62,7 +62,7 @@
             if (!$this->checkAppointmentIsExist($id)) {
                 return DataReturn::Result(status: HttpCode::NOT_FOUND);
             }
-            return DataReturn::Result($this->appointmentRepository->findWhere(['id' => $id]));
+            return DataReturn::Result($this->appointmentRepository->with([ 'patient','doctor.account','time'])->findWhere(['id' => $id]));
         }
 
         public function getAppointmentByDoctorId($id, $param)
