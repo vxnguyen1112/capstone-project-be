@@ -10,7 +10,7 @@
     use Illuminate\Http\Exceptions\HttpResponseException;
     use Illuminate\Validation\ValidationException;
 
-    class StoreDoctorRequest extends FormRequest
+    class StoreStudyingHistoryRequest extends FormRequest
     {
         /**
          * Determine if the user is authorized to make this request.
@@ -25,10 +25,8 @@
         public function rules()
         {
             return [
-                'specialization' => 'required|string|max:150',
-                'yearsOfExperience' => 'required|integer|max:100',
-                'practiceLocation' => 'required|string|max:150',
-                'account_id' => 'required|string|exists:accounts,id|unique:doctors,account_id',
+                'doctor_id' => 'required|string|exists:doctors,id',
+                'studying_histories'=>'required'
             ];
         }
 

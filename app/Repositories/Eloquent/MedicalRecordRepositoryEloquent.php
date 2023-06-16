@@ -24,12 +24,12 @@
 
         public function getMedicalRecordByDoctorId($id)
         {
-            return Medical_record::where(['doctor_id' => $id])->latest()->get();
+            return Medical_record::where(['doctor_id' => $id])->with(['patient','doctor','medications'])->latest()->get();
         }
 
         public function getMedicalRecordByPatientId($id)
         {
-            return Medical_record::where(['patient_id' => $id])->latest()->get();
+            return Medical_record::where(['patient_id' => $id])->with(['patient','doctor','medications'])->latest()->get();
         }
 
     }

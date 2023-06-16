@@ -16,7 +16,8 @@
             'yearsOfExperience',
             'practiceLocation',
             'account_id',
-            'cv'
+            'cv',
+            'is_activated'
         ];
 
         public function account()
@@ -35,5 +36,13 @@
         public function feedback()
         {
             return $this->hasMany(Feedback::class)->oldest();
+        }
+        public function experiences()
+        {
+            return $this->hasMany(Experience::class)->latest();
+        }
+        public function studying_histories()
+        {
+            return $this->hasMany(Studying_history::class)->latest();
         }
     }

@@ -9,7 +9,10 @@
     use App\Http\Requests\StoreDoctorRequest;
     use App\Http\Requests\StoreRoleRequest;
     use App\Services\DoctorService;
+    use Illuminate\Database\Eloquent\ModelNotFoundException;
     use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\DB;
+    use Illuminate\Support\Facades\Log;
 
     class DoctorController extends Controller
     {
@@ -22,8 +25,20 @@
 
         public function store(StoreDoctorRequest $request)
         {
-            $result = $this->doctorService->store($request->all());
-            return ResponseHelper::send($result['data'], statusCode: HttpCode::CREATED);
+            try {
+                DB::beginTransaction();
+                $result = $this->doctorService->store($request->all());
+                DB::commit();
+                return ResponseHelper::send($result['data'], statusCode: HttpCode::CREATED);
+            } catch (ModelNotFoundException $e) {
+                Log::error($e);
+                return CommonResponse::notFoundResponse();
+            } catch (\Exception $e) {
+                error_log($e);
+                DB::rollBack();
+                Log::error($e);
+                return CommonResponse::unknownResponse();
+            }
         }
 
         public function getDoctorById($id)
@@ -67,7 +82,7 @@
         public function update(Request $request, $id)
         {
             $result = $this->doctorService->update($request->all(), $id);
-            if ($$result['status'] === HttpCode::NOT_FOUND) {
+            if ($result['status'] === HttpCode::NOT_FOUND) {
                 return CommonResponse::notFoundResponse();
             }
             return ResponseHelper::send($result['data']);

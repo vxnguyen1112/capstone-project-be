@@ -32,7 +32,9 @@
         {
             return Doctor::where(['id' => $id])->withAvg('feedback', 'star')->with([
                 'account',
-                'feedback'
+                'feedback',
+                'experiences',
+                'studying_histories'
             ])->get();
         }
 
