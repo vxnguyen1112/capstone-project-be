@@ -81,7 +81,6 @@
         public function resetPassword(ResetPassworkRequest $request)
         {
             $data = $request->all();
-            $data['password'] = bcrypt($data['password']);
             $id = auth()->user()['id'];
             $result = $this->accountService->changePassword($data, $id);
             if ($result['status'] === HttpCode::NOT_FOUND) {
