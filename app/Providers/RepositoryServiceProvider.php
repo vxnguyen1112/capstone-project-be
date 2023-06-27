@@ -68,5 +68,13 @@
                 \App\Repositories\NotificationRepository::class,
                 \App\Repositories\Eloquent\NotificationRepositoryEloquent::class
             );
+            $this->app->bind(
+                \App\Repositories\ExperienceRepository::class,
+                \App\Repositories\Eloquent\ExperienceRepositoryEloquent::class
+            );
+            $this->app->bind(
+                \App\Repositories\StudyingHistoryRepository::class,
+                \App\Repositories\Eloquent\StudyingHistoryRepositoryEloquent::class
+            );
         }
     }

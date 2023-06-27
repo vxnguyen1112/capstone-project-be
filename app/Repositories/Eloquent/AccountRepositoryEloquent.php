@@ -67,7 +67,7 @@
         {
             $placeholders = implode(',', array_fill(0, count($arr), '?'));
             $result = Account::where('display_name', 'LIKE', "%{$query}%")->whereIn('id',
-                $arr)->orderByRaw("field(id,{$placeholders})", $arr)->get();
+                $arr)->orderByRaw("field(id,{$placeholders})", $arr)->with(['information.address'])->get();
             return $result;
         }
 

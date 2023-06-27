@@ -3,13 +3,17 @@
     namespace App\Observers;
 
     use App\Events\Event;
+    use App\Jobs\SendEmailJob;
     use App\Models\Appointment;
     use App\Services\AppointmentService;
     use App\Services\NotificationService;
+    use Illuminate\Contracts\Queue\ShouldQueue;
+    use Illuminate\Queue\InteractsWithQueue;
     use Illuminate\Support\Facades\Log;
 
-    class AppointmentObserver
+    class AppointmentObserver implements ShouldQueue
     {
+        use InteractsWithQueue;
         protected $appointmentService;
 
         protected $notificationService;
@@ -36,12 +40,19 @@
                 'content' => $description,
                 'link' => '/appointment',
                 'account_id' => $appointment['patient_id'],
-                'to_account_id' => $result['doctor']['account']['id']
+                'to_account_id' =>$result['doctor']['account']['id']
             ];
             $notification = $this->notificationService->store($data);
             $this->shareEvent = new Event($result['doctor']['account']['id']);
             event($this->shareEvent->create('notification', $appointment['patient_id'], $notification));
+            $this->shareEvent = new Event($appointment['doctor_id']);
             event($this->shareEvent->create('freetime', $appointment['patient_id'], $result['time']));
+            $mailData = [
+                'title' => 'Mail from Doctor Booking',
+                'body' => $result['patient']['display_name'] . ' đã tạo lịch khám với bạn '. $result['time']['startTime'],
+                'url' => env("URL_FE") . '/appointment'
+            ];
+            dispatch(new SendEmailJob($result['doctor']['account']['email'], $mailData));
         }
 
         /**
@@ -63,7 +74,12 @@
             $notification = $this->notificationService->store($data);
             $this->shareEvent = new Event($appointment['patient_id']);
             event($this->shareEvent->create('notification', $result['doctor']['account']['id'], $notification));
-
+            $mailData = [
+                'title' => 'Mail from Doctor Booking',
+                'body' => $result['doctor']['account']['display_name'] . ' đã ' . $appointment['status'] . ' lịch khám của bạn.',
+                'url' => env("URL_FE") . '/appointments'
+            ];
+            dispatch(new SendEmailJob($result['patient']['email'], $mailData));
         }
 
         /**
@@ -74,7 +90,7 @@
          */
         public function deleted(Appointment $appointment)
         {
-            //
+
         }
 
         /**

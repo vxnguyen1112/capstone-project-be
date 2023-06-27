@@ -10,7 +10,7 @@
     use Illuminate\Http\Exceptions\HttpResponseException;
     use Illuminate\Validation\ValidationException;
 
-    class StoreDoctorRequest extends FormRequest
+    class ResetPassworkRequest extends FormRequest
     {
         /**
          * Determine if the user is authorized to make this request.
@@ -25,17 +25,14 @@
         public function rules()
         {
             return [
-                'specialization' => 'required|string|max:150',
-                'yearsOfExperience' => 'required|integer|max:100',
-                'practiceLocation' => 'required|string|max:150',
-                'account_id' => 'required|string|exists:accounts,id|unique:doctors,account_id',
+                'password' => 'required|string|min:8',
+                'new_password' => 'required|string|min:8',
             ];
         }
 
         protected function failedValidation(Validator $validator)
         {
             $validator_errors = (new ValidationException($validator))->errors();
-            throw new HttpResponseException(ResponseHelper::send([], Status::NOT_GOOD, HttpCode::BAD_REQUEST,
-                reset($validator_errors)[0]));
+            throw new HttpResponseException(ResponseHelper::send([],Status::NOT_GOOD, HttpCode::BAD_REQUEST, reset($validator_errors)[0]));
         }
     }

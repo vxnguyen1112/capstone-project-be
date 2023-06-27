@@ -15,6 +15,8 @@
     use App\Http\Controllers\api\CommentController;
     use App\Http\Controllers\api\FeedbackController;
     use App\Http\Controllers\api\NotificationController;
+    use App\Http\Controllers\api\ExperienceController;
+    use App\Http\Controllers\api\StudyingHistoryController;
 
 
 
@@ -47,6 +49,7 @@
                 Route::get('/user-profile', [AuthController::class, 'userProfile']);
                 Route::get('/user', [AuthController::class, 'getUserByQuery']);
                 Route::put('/user', [AuthController::class, 'update']);
+                Route::put('/user/resetpassword', [AuthController::class, 'resetPassword']);
                 Route::post('/change-pass', [AuthController::class, 'changePassWord']);
                 Route::post('/avatar', [UploadImageController::class, 'uploadToAccountImage']);
             }
@@ -73,6 +76,8 @@
     Route::get('/doctor/medicalrecord', [MedicalRecordController::class, 'getMedicalRecordAllDoctor']);
     Route::get('/doctor/{id}', [DoctorController::class, 'getDoctorById']);
     Route::get('/doctor/{id}/freetime', [DoctorController::class, 'getFreeTimeByDoctorId']);
+    Route::get('/doctor/{id}/studyinghistory', [StudyingHistoryController::class, 'getStudyingHistoryByDoctorId']);
+    Route::get('/doctor/{id}/experience', [ExperienceController::class, 'getExperienceByDoctorId']);
     Route::get('/doctor/{id}/patient', [DoctorController::class, 'getPatientOfDoctor']);
     Route::get('/doctor/{id}/feedback', [FeedbackController::class, 'getFeedbackByDoctor']);
     Route::post('/doctor', [DoctorController::class, 'store']);
@@ -125,3 +130,13 @@
     Route::post('/feedback', [FeedbackController::class, 'store']);
     Route::put('/feedback/{id}/', [FeedbackController::class, 'update']);
     Route::delete('/feedback/{id}', [FeedbackController::class, 'destroy']);
+
+    Route::get('/experience/{id}', [ExperienceController::class, 'getExperienceById']);
+    Route::post('/experience', [ExperienceController::class, 'store']);
+    Route::put('/experience/{id}/', [ExperienceController::class, 'update']);
+    Route::delete('/experience/{id}', [ExperienceController::class, 'destroy']);
+
+    Route::get('/studyinghistory/{id}', [StudyingHistoryController::class, 'getStudyingHistoryById']);
+    Route::post('/studyinghistory', [StudyingHistoryController::class, 'store']);
+    Route::put('/studyinghistory/{id}/', [StudyingHistoryController::class, 'update']);
+    Route::delete('/studyinghistory/{id}', [StudyingHistoryController::class, 'destroy']);

@@ -7,6 +7,8 @@
     use App\Repositories\AccountRepository;
     use App\Repositories\AppointmentRepository;
     use App\Repositories\DoctorRepository;
+    use App\Repositories\ExperienceRepository;
+    use App\Repositories\StudyingHistoryRepository;
     use Illuminate\Support\Facades\Log;
 
     class DoctorService
@@ -15,27 +17,55 @@
         protected $accountRepository;
         protected $appointmentRepository;
 
+        protected $experienceRepository;
+        protected $studyingHistoryRepository;
+
         /**
          * @param $doctorRepository
          * @param $accountRepository
          * @param $appointmentRepository
+         * @param $experienceRepository
+         * @param $studyingHistoryRepository
          */
 
 
         public function __construct(
             DoctorRepository $doctorRepository,
             AccountRepository $accountRepository,
-            AppointmentRepository $appointmentRepository
+            AppointmentRepository $appointmentRepository,
+            ExperienceRepository $experienceRepository,
+            StudyingHistoryRepository $studyingHistoryRepository
         ) {
             $this->doctorRepository = $doctorRepository;
             $this->accountRepository = $accountRepository;
             $this->appointmentRepository = $appointmentRepository;
+            $this->experienceRepository = $experienceRepository;
+            $this->studyingHistoryRepository = $studyingHistoryRepository;
         }
 
         public function store($data)
         {
             $this->accountRepository->update(['is_verified' => true], $data['account_id']);
-            return DataReturn::Result($this->doctorRepository->create($data));
+            $doctor = $this->doctorRepository->create($data);
+            $doctor['experiences']=[];
+            $doctor['studying_histories']=[];
+            if (array_key_exists('experiences', $data)) {
+                foreach ($data['experiences'] as $item) {
+                    $item['doctor_id'] = $doctor['id'];
+                    $temp = $doctor['experiences'];
+                    array_push($temp, $this->experienceRepository->create($item));
+                    $doctor['experiences'] = $temp;
+                }
+            }
+            if (array_key_exists('studying_histories', $data)) {
+                foreach ($data['studying_histories'] as $item) {
+                    $item['doctor_id'] = $doctor['id'];
+                    $temp = $doctor['studying_histories'];
+                    array_push($temp, $this->studyingHistoryRepository->create($item));
+                    $doctor['studying_histories'] = $temp;
+                }
+            }
+            return DataReturn::Result($doctor);
         }
 
         public function getDoctorById($id)

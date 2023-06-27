@@ -4,9 +4,11 @@
 
     use App\Helpers\DataReturn;
     use App\Helpers\HttpCode;
+    use App\Helpers\ResponseHelper;
     use App\Models\Role;
     use App\Repositories\AccountRepository;
     use App\Repositories\AddressRepository;
+    use App\Repositories\DoctorRepository;
     use App\Repositories\InformationRepository;
     use App\Repositories\RoleRepository;
     use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -20,16 +22,20 @@
         protected $informationRepository;
         protected $roleRepository;
 
+        protected $doctorRepository;
+
         public function __construct(
             AccountRepository $accountRepository,
             AddressRepository $addressRepository,
             InformationRepository $informationRepository,
-            RoleRepository $roleRepository
+            RoleRepository $roleRepository,
+            DoctorRepository $doctorRepository
         ) {
             $this->accountRepository = $accountRepository;
             $this->addressRepository = $addressRepository;
             $this->informationRepository = $informationRepository;
             $this->roleRepository = $roleRepository;
+            $this->doctorRepository = $doctorRepository;
         }
 
         public function checkAccountIsExist($id)
@@ -96,19 +102,47 @@
 
         protected function createNewToken($token)
         {
+            $user = auth()->user()->toArray();
+            $role = $this->roleRepository->findWhere(['id' => $user['role_id']])->first();
             $results["data"] = [
                 'access_token' => $token,
                 'token_type' => 'bearer',
                 'expires_in' => auth()->factory()->getTTL() * 60,
-                'account' => auth()->user()
+                'account' => $user
             ];
+            if ($role['name'] === \App\Helpers\Role::DOCTOR) {
+                $results["data"]['is_activated'] = $this->doctorRepository->findWhere(['account_id' => $user['id']])->first()['is_activated'];
+            }
             $results["status"] = HttpCode::CREATED;
             return $results;
         }
 
         public function update($data, $id)
         {
-            return DataReturn::Result($this->accountRepository->update($data, $id));
+            $results = $this->accountRepository->update($data, $id);
+            if (key_exists('information', $data)) {
+                $results['information'] = $this->informationRepository->update($data['information'],
+                    $results['information_id']);
+            }
+            if (key_exists('address', $data)) {
+                $information = $this->informationRepository->findWhere(['id' => $results['information_id']])->first();
+                $results['address'] = $this->addressRepository->update($data['address'], $information['address_id']);
+            }
+            return DataReturn::Result($results);
+        }
+
+        public function changePassword($data, $id)
+        {
+            $user = $this->accountRepository->findWhere(['id' => $id])->first()->toArray();
+            $user['password'] = $data['password'];
+            if (!auth()->attempt([
+                'email' => $user['email'],
+                'password' => $data['password']
+            ])) {
+                return DataReturn::Result(status: HttpCode::NOT_FOUND);
+            }
+            $password = bcrypt($data['new_password']);
+            return DataReturn::Result($this->accountRepository->update(['password' => $password], $id));
         }
 
         public function logout()
@@ -129,8 +163,17 @@
                 array_push($query, ['display_name', 'like', '%' . addslashes($query['display_name']) . '%']);
                 unset($query['display_name']);
             }
-            return $this->accountRepository->findWhere($query);
+            return $this->accountRepository->with(['information.address'])->findWhere($query);
         }
 
+        public function userProfile()
+        {
+            $user = auth()->user()->toArray();
+            $role = $this->roleRepository->findWhere(['id' => $user['role_id']])->first();
+            if ($role['name'] === \App\Helpers\Role::DOCTOR) {
+                $user['is_activated'] = $this->doctorRepository->findWhere(['account_id' => $user['id']])->first()['is_activated'];
+            }
+            return DataReturn::Result($user);
+        }
 
     }

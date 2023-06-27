@@ -22,7 +22,7 @@
         {
             return [
                 'email' => 'required|string|email|max:100',
-                'password' => 'required|string|min:6',
+                'password' => 'required|string|min:8',
                 'street' => 'required|string|max:100',
                 'ward' => 'required|string|max:100',
                 'district' => 'required|string|max:100',
