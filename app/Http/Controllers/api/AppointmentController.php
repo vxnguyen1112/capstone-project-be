@@ -24,7 +24,7 @@
         {
             $result = $this->appointmentService->store($request->all());
             if ($result['status'] === HttpCode::BAD_REQUEST) {
-                $message = 'The time you booked is not available.';
+                $message = 'Bạn không thể đặt lịch khám vào thời gian này.';
                 return ResponseHelper::send([], Status::NOT_GOOD, HttpCode::BAD_REQUEST, $message);
             }
             return ResponseHelper::send($result['data'], statusCode: HttpCode::CREATED);
