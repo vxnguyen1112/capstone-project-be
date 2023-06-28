@@ -3,9 +3,11 @@
     namespace App\Observers;
 
     use App\Events\Event;
+    use App\Helpers\AppointmentStatus;
     use App\Jobs\SendEmailJob;
     use App\Models\Appointment;
     use App\Services\AppointmentService;
+    use App\Services\FreeTimeService;
     use App\Services\NotificationService;
     use Illuminate\Contracts\Queue\ShouldQueue;
     use Illuminate\Queue\InteractsWithQueue;
@@ -14,16 +16,23 @@
     class AppointmentObserver implements ShouldQueue
     {
         use InteractsWithQueue;
+
         protected $appointmentService;
 
         protected $notificationService;
 
         protected $shareEvent;
 
-        public function __construct(AppointmentService $appointmentService, NotificationService $notificationService)
-        {
+        protected $freeTimeService;
+
+        public function __construct(
+            AppointmentService $appointmentService,
+            NotificationService $notificationService,
+            FreeTimeService $freeTimeService
+        ) {
             $this->appointmentService = $appointmentService;
             $this->notificationService = $notificationService;
+            $this->freeTimeService = $freeTimeService;
         }
 
         /**
@@ -40,7 +49,7 @@
                 'content' => $description,
                 'link' => '/appointment',
                 'account_id' => $appointment['patient_id'],
-                'to_account_id' =>$result['doctor']['account']['id']
+                'to_account_id' => $result['doctor']['account']['id']
             ];
             $notification = $this->notificationService->store($data);
             $this->shareEvent = new Event($result['doctor']['account']['id']);
@@ -49,7 +58,7 @@
             event($this->shareEvent->create('freetime', $appointment['patient_id'], $result['time']));
             $mailData = [
                 'title' => 'Mail from Doctor Booking',
-                'body' => $result['patient']['display_name'] . ' đã tạo lịch khám với bạn '. $result['time']['startTime'],
+                'body' => $result['patient']['display_name'] . ' đã tạo lịch khám với bạn ' . $result['time']['startTime'],
                 'url' => env("URL_FE") . '/appointment'
             ];
             dispatch(new SendEmailJob($result['doctor']['account']['email'], $mailData));
@@ -63,6 +72,11 @@
          */
         public function updated(Appointment $appointment)
         {
+            if ($appointment['status'] === AppointmentStatus::DECLINE) {
+                $this->freeTimeService->update(['is_active' => true], $appointment['free_time_id']);
+                $appointment['status'] = 'TỪ CHỐI';
+            }
+            $appointment['status'] = 'XÁC NHẬN';
             $result = $this->appointmentService->getAppointmentById($appointment['id'])['data']->toArray()[0];
             $description = "<b class='text-displayname'>" . $result['doctor']['account']['display_name'] . "</b> đã <b class='text-status'> " . $appointment['status'] . " </b> lịch khám của bạn";
             $data = [

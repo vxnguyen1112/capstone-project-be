@@ -4,8 +4,8 @@
 
     class FreeTimeMessage
     {
-        public const ERROR_DATE = 'The start time must be after ';
-        public const ERROR_COMPARE_DATE = 'The end time must be after start time';
-        public const CONFlICT_DATE = 'Your free time is in conflict';
+        public const ERROR_DATE = 'Thời gian bắt đầu phải sau ';
+        public const ERROR_COMPARE_DATE = 'Thời gian kết thúc phải sau thời gian bắt đầu.';
+        public const CONFlICT_DATE = 'Lịch khám bạn tạo bị xung đột.';
 
     }

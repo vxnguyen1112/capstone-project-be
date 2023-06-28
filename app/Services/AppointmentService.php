@@ -41,10 +41,6 @@
 
         public function store($data)
         {
-            $appointment = $this->appointmentRepository->findWhere(['free_time_id' => $data['free_time_id']])->first();
-            if (!is_null($appointment)) {
-                return DataReturn::Result(status: HttpCode::BAD_REQUEST);
-            }
             $freeTime = $this->freeTimeRepository->findWhere(['id' => $data['free_time_id'],'is_active' => true])->first();
             if (is_null($freeTime)) {
                 return DataReturn::Result(status: HttpCode::BAD_REQUEST);
