@@ -128,7 +128,7 @@
             event($this->shareEvent->create('notification', $result['patient_id'], $notification));
             event($this->shareEvent->create('freetime', $result['patient_id'], $result['time']));
             $mailData = [
-                'title' => 'Mail from Doctor Booking',
+                'title' => 'Thông báo từ Doctor Booking',
                 'body' => $result['patient']['display_name'] . ' đã hủy lịch khám với bạn '. $result['time']['startTime'],
                 'url' => env("URL_FE") . '/appointment'
             ];

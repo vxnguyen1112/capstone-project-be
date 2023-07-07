@@ -6,8 +6,8 @@
 <body>
 <h1>{{$mailData['title'] }}</h1>
 <p>{{ $mailData['body'] }}</p>
-<a href="{{url($mailData['url'])}}">Click here</a>
-<p>Please view appointment</p>
-<p>Thank you</p>
+<a href="{{url($mailData['url'])}}">Click tại đây.</a>
+<p>Vui lòng xem chi tiết tại website.</p>
+<p>Cảm ơn!</p>
 </body>
 </html>

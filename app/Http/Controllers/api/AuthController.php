@@ -8,7 +8,8 @@
     use App\Helpers\Status;
     use App\Http\Controllers\Controller;
     use App\Http\Requests\LoginRequest;
-    use App\Http\Requests\ResetPassworkRequest;
+    use App\Http\Requests\ChangePasswordRequest;
+    use App\Http\Requests\ResetPasswordRequest;
     use App\Http\Requests\StoreRegisterRequest;
     use App\Services\AccountService;
     use Illuminate\Http\Exceptions\HttpResponseException;
@@ -78,7 +79,7 @@
             return ResponseHelper::send($result['data']);
         }
 
-        public function resetPassword(ResetPassworkRequest $request)
+        public function changePassword(ChangePasswordRequest $request)
         {
             $data = $request->all();
             $id = auth()->user()['id'];
@@ -88,5 +89,14 @@
                 return ResponseHelper::send([], Status::NOT_GOOD, HttpCode::BAD_REQUEST, $message);
             }
             return ResponseHelper::send($result['data']);
+        }
+        public function resetPassword(ResetPasswordRequest $request)
+        {
+            $data = $request->all();
+            $result = $this->accountService->resetPassword($data['email']);
+            if ($result['status'] === HttpCode::NOT_FOUND) {
+                return CommonResponse::notFoundResponse();
+            }
+            return CommonResponse::resetPassSuccessfullyResponse();
         }
     }

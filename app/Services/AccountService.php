@@ -5,6 +5,7 @@
     use App\Helpers\DataReturn;
     use App\Helpers\HttpCode;
     use App\Helpers\ResponseHelper;
+    use App\Jobs\SendEmailJob;
     use App\Models\Role;
     use App\Repositories\AccountRepository;
     use App\Repositories\AddressRepository;
@@ -14,6 +15,7 @@
     use Illuminate\Database\Eloquent\ModelNotFoundException;
     use Illuminate\Support\Facades\DB;
     use Illuminate\Support\Facades\Log;
+    use Illuminate\Support\Str;
 
     class AccountService
     {
@@ -134,7 +136,6 @@
         public function changePassword($data, $id)
         {
             $user = $this->accountRepository->findWhere(['id' => $id])->first()->toArray();
-            $user['password'] = $data['password'];
             if (!auth()->attempt([
                 'email' => $user['email'],
                 'password' => $data['password']
@@ -143,6 +144,24 @@
             }
             $password = bcrypt($data['new_password']);
             return DataReturn::Result($this->accountRepository->update(['password' => $password], $id));
+        }
+
+        public function resetPassword($email)
+        {
+            $user = $this->accountRepository->findWhere(['email' => $email])->first();
+            if (is_null($user)) {
+                return DataReturn::Result(status: HttpCode::NOT_FOUND);
+            }
+            $randomString = Str::random(30);
+            error_log($randomString);
+            $password = bcrypt($randomString);
+            $mailData = [
+                'title' => 'Thông báo từ Doctor Booking',
+                'body' => 'Mật khẩu được thay đổi thành: '. $randomString,
+                'url' => env("URL_FE")
+            ];
+            dispatch(new SendEmailJob($email, $mailData));
+            return DataReturn::Result($this->accountRepository->update(['password' => $password], $user['id']));
         }
 
         public function logout()
@@ -175,5 +194,4 @@
             }
             return DataReturn::Result($user);
         }
-
     }

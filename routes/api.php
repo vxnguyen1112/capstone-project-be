@@ -49,8 +49,7 @@
                 Route::get('/user-profile', [AuthController::class, 'userProfile']);
                 Route::get('/user', [AuthController::class, 'getUserByQuery']);
                 Route::put('/user', [AuthController::class, 'update']);
-                Route::put('/user/resetpassword', [AuthController::class, 'resetPassword']);
-                Route::post('/change-pass', [AuthController::class, 'changePassWord']);
+                Route::put('/user/change-pass', [AuthController::class, 'changePassWord']);
                 Route::post('/avatar', [UploadImageController::class, 'uploadToAccountImage']);
             }
         );
@@ -140,3 +139,5 @@
     Route::post('/studyinghistory', [StudyingHistoryController::class, 'store']);
     Route::put('/studyinghistory/{id}/', [StudyingHistoryController::class, 'update']);
     Route::delete('/studyinghistory/{id}', [StudyingHistoryController::class, 'destroy']);
+
+    Route::post('auth/user/reset-password', [AuthController::class, 'resetPassword']);
