@@ -22,6 +22,14 @@
                 HttpCode::OK,
             );
         }
+        public static function resetPassSuccessfullyResponse()
+        {
+            return ResponseHelper::send(
+                ['message' => 'Vui lòng xem mật khẩu mới tại mail.'],
+                Status::OK,
+                HttpCode::OK,
+            );
+        }
 
         public static function sendSuccessfullyResponse()
         {

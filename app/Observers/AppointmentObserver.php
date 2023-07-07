@@ -57,7 +57,7 @@
             $this->shareEvent = new Event($appointment['doctor_id']);
             event($this->shareEvent->create('freetime', $appointment['patient_id'], $result['time']));
             $mailData = [
-                'title' => 'Mail from Doctor Booking',
+                'title' => 'Thông báo từ Doctor Booking',
                 'body' => $result['patient']['display_name'] . ' đã tạo lịch khám với bạn ' . $result['time']['startTime'],
                 'url' => env("URL_FE") . '/appointment'
             ];
@@ -89,7 +89,7 @@
             $this->shareEvent = new Event($appointment['patient_id']);
             event($this->shareEvent->create('notification', $result['doctor']['account']['id'], $notification));
             $mailData = [
-                'title' => 'Mail from Doctor Booking',
+                'title' => 'Thông báo từ Doctor Booking',
                 'body' => $result['doctor']['account']['display_name'] . ' đã ' . $appointment['status'] . ' lịch khám của bạn.',
                 'url' => env("URL_FE") . '/appointments'
             ];

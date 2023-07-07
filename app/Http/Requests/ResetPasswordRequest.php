@@ -10,7 +10,7 @@
     use Illuminate\Http\Exceptions\HttpResponseException;
     use Illuminate\Validation\ValidationException;
 
-    class ResetPassworkRequest extends FormRequest
+    class ResetPasswordRequest extends FormRequest
     {
         /**
          * Determine if the user is authorized to make this request.
@@ -25,8 +25,7 @@
         public function rules()
         {
             return [
-                'password' => 'required|string|min:8',
-                'new_password' => 'required|string|min:8',
+                'email' => 'required|email',
             ];
         }
 

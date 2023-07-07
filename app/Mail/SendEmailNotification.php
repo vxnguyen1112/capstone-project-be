@@ -32,7 +32,7 @@
          */
         public function build()
         {
-            return $this->subject('Mail from DoctorBooking.com')
+            return $this->subject('Thông báo từ DoctorBooking.me')
                 ->view('emails.Notification');
         }
     }
